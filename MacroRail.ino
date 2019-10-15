@@ -11,6 +11,7 @@ char auth[] = "32HTfa1ZP7Cw4sNYdYoCvixtjXBKw5YC"; /*
 */
 const int stepPin = 3;
 const int dirPin = 4;
+const int shutterPin =5;
 
 bool moveForward = false;
 bool moveBackward = false;
@@ -37,6 +38,7 @@ void setup()
   */
   pinMode(stepPin, OUTPUT);
   pinMode(dirPin, OUTPUT);
+  pinMode(shutterPin,OUTPUT);
   Serial.begin(9600);
   Blynk.begin(Serial, auth);
 }
@@ -45,6 +47,9 @@ void takeImage()
 {
   // stabilise period
   delay(1000);
+   digitalWrite(shutterPin, HIGH);
+  delay(500);
+  digitalWrite(shutterPin, LOW);
   // TODO : do shutter things
 }
 
@@ -53,11 +58,6 @@ void loop()
 
   Blynk.run();
 
-  doThings();
-}
-
-void doThings()
-{
   if (moveForward)
   {
     move(true);
@@ -76,6 +76,8 @@ void doThings()
   }
 }
 
+
+
 void move(bool forwards)
 {
   if (forwards)
@@ -84,9 +86,9 @@ void move(bool forwards)
     digitalWrite(dirPin, LOW);
 
   digitalWrite(stepPin, HIGH);
-  delay(10);
+  delay(2);
   digitalWrite(stepPin, LOW);
-  delay(10);
+  delay(2);
 
   if (forwards)
     currentStep++;
